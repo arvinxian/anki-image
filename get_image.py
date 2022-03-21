@@ -15,3 +15,4 @@ imageList = resultContent["data"]["pic"]
 if imageList:
     print("图片地址为",imageList[0]["image"])
 # print(req.text)
+

@@ -43,9 +43,12 @@ def query_sentence():
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+    resultContent = response.text
+    parsedResult = response.json()
+    result = parsedResult['individual']['pastExamSents']
 
     print(response.text)
-    return response.text
+    return result
 
 if __name__ == "__main__":
     # app.run()

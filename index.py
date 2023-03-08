@@ -1,5 +1,4 @@
 from flask import Flask, request
-from gevent import pywsgi
 import requests
 from requests.packages import urllib3
 import urllib3
@@ -19,11 +18,34 @@ def query_word():
     req = requests.get('https://picdict.youdao.com/search?q=' + word + '&le=en',verify=False)
     # resultContent = json.dumps(req.content)
     resultContent = req.json()
-    imageList = resultContent["data"]["pic"]
-    if imageList:
-        print("图片地址为",imageList[0]["image"])
-    # print(req.text)
-    return imageList[0]["image"]
+    return resultContent
+    
+    # imageList = resultContent["data"]["pic"]
+    # if imageList:
+    #     print("图片地址为",imageList[0]["image"])
+    # # print(req.text)
+    # return imageList[0]["image"]
+
+@app.route('/sentence-query')
+def query_sentence():
+    word = request.args.get('word', default = '*', type = str)
+    # req = requests.get('https://picdict.youdao.com/search?q=' + word + '&le=en',verify=False)
+    # resultContent = json.dumps(req.content)
+    # resultContent = req.json()
+    
+    
+    url = "https://dict.youdao.com/jsonapi_s?doctype=json"
+
+    payload='q=' + word
+    headers = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+    # 'Cookie': 'OUTFOX_SEARCH_USER_ID=1823179802@120.235.177.185'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    print(response.text)
+    return response.text
 
 if __name__ == "__main__":
     # app.run()
